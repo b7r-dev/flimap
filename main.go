@@ -10,6 +10,9 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
+// version is set at build time via -ldflags. Defaults to "dev" for local builds.
+var version = "dev"
+
 func main() {
 	httpAddr := flag.String("http", "", "HTTP address to listen on (e.g. :8080). If empty, uses stdio transport (default)")
 	flag.Parse()
@@ -29,7 +32,7 @@ func main() {
 
 	server := mcp.NewServer(&mcp.Implementation{
 		Name:    "flimap",
-		Version: "0.1.0",
+		Version: version,
 	}, &mcp.ServerOptions{
 		Instructions: "IMAP/SMTP mail server for Protonmail Bridge. " +
 			"Mail folders are hierarchical with '/' delimiters (e.g. 'INBOX', 'Folders/ben@b7r.dev', 'Labels/personal'). " +
