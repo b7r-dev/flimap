@@ -27,26 +27,26 @@ type Config struct {
 // allMailFolder is the IMAP folder that contains all messages across addresses.
 const allMailFolder = "All Mail"
 
-// LoadConfig reads configuration from FLYMAP_ environment variables.
+// LoadConfig reads configuration from FLIMAP_ environment variables.
 func LoadConfig() (*Config, error) {
 	cfg := &Config{
-		IMAPHost: getEnv("FLYMAP_IMAP_HOST", "127.0.0.1"),
-		IMAPPort: getEnvInt("FLYMAP_IMAP_PORT", 1143),
-		SMTPHost: getEnv("FLYMAP_SMTP_HOST", "127.0.0.1"),
-		SMTPPort: getEnvInt("FLYMAP_SMTP_PORT", 1025),
-		Username: os.Getenv("FLYMAP_USERNAME"),
-		Password: os.Getenv("FLYMAP_PASSWORD"),
-		TLSMode:  getEnv("FLYMAP_TLS_MODE", "starttls"),
+		IMAPHost: getEnv("FLIMAP_IMAP_HOST", "127.0.0.1"),
+		IMAPPort: getEnvInt("FLIMAP_IMAP_PORT", 1143),
+		SMTPHost: getEnv("FLIMAP_SMTP_HOST", "127.0.0.1"),
+		SMTPPort: getEnvInt("FLIMAP_SMTP_PORT", 1025),
+		Username: os.Getenv("FLIMAP_USERNAME"),
+		Password: os.Getenv("FLIMAP_PASSWORD"),
+		TLSMode:  getEnv("FLIMAP_TLS_MODE", "starttls"),
 	}
 
 	if cfg.Username == "" {
-		return nil, fmt.Errorf("FLYMAP_USERNAME is required")
+		return nil, fmt.Errorf("FLIMAP_USERNAME is required")
 	}
 	if cfg.Password == "" {
-		return nil, fmt.Errorf("FLYMAP_PASSWORD is required")
+		return nil, fmt.Errorf("FLIMAP_PASSWORD is required")
 	}
 
-	cfg.FromAddress = getEnv("FLYMAP_FROM_ADDRESS", cfg.Username)
+	cfg.FromAddress = getEnv("FLIMAP_FROM_ADDRESS", cfg.Username)
 
 	// FolderAddresses can be set programmatically (e.g. via code), not via env var.
 	// Virtual folder functionality is retained for programmatic use.

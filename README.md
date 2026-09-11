@@ -1,4 +1,4 @@
-# flymap
+# flimap
 
 An MCP (Model Context Protocol) server that exposes your local Protonmail Bridge as 12 tools for an LLM. Built with the [official Go MCP SDK](https://github.com/modelcontextprotocol/go-sdk), [go-imap/v2](https://github.com/emersion/go-imap) for IMAP, and [enmime](https://github.com/jhillyerd/enmime) for MIME parsing.
 
@@ -10,23 +10,23 @@ An MCP (Model Context Protocol) server that exposes your local Protonmail Bridge
 ## Build
 
 ```sh
-go build -o flymap
+go build -o flimap
 ```
 
 ## Configuration
 
-All configuration is via environment variables with the `FLYMAP_` prefix:
+All configuration is via environment variables with the `FLIMAP_` prefix:
 
 | Variable | Default | Description |
 |---|---|---|
-| `FLYMAP_IMAP_HOST` | `127.0.0.1` | Protonmail Bridge IMAP host |
-| `FLYMAP_IMAP_PORT` | `1143` | Bridge IMAP port |
-| `FLYMAP_SMTP_HOST` | `127.0.0.1` | Protonmail Bridge SMTP host |
-| `FLYMAP_SMTP_PORT` | `1025` | Bridge SMTP port |
-| `FLYMAP_USERNAME` | *(required)* | Full email address |
-| `FLYMAP_PASSWORD` | *(required)* | Bridge password (not your Proton login password) |
-| `FLYMAP_TLS_MODE` | `starttls` | TLS mode: `starttls`, `ssl`, or `none` |
-| `FLYMAP_FROM_ADDRESS` | = username | From address for sent mail |
+| `FLIMAP_IMAP_HOST` | `127.0.0.1` | Protonmail Bridge IMAP host |
+| `FLIMAP_IMAP_PORT` | `1143` | Bridge IMAP port |
+| `FLIMAP_SMTP_HOST` | `127.0.0.1` | Protonmail Bridge SMTP host |
+| `FLIMAP_SMTP_PORT` | `1025` | Bridge SMTP port |
+| `FLIMAP_USERNAME` | *(required)* | Full email address |
+| `FLIMAP_PASSWORD` | *(required)* | Bridge password (not your Proton login password) |
+| `FLIMAP_TLS_MODE` | `starttls` | TLS mode: `starttls`, `ssl`, or `none` |
+| `FLIMAP_FROM_ADDRESS` | = username | From address for sent mail |
 
 TLS certificate verification is skipped (`InsecureSkipVerify: true`) since Bridge uses a self-signed certificate and traffic stays on localhost.
 
@@ -35,13 +35,13 @@ TLS certificate verification is skipped (`InsecureSkipVerify: true`) since Bridg
 ### Stdio (default — for Claude Desktop, etc.)
 
 ```sh
-FLYMAP_USERNAME=you@protonmail.com FLYMAP_PASSWORD=your-bridge-password ./flymap
+FLIMAP_USERNAME=you@protonmail.com FLIMAP_PASSWORD=your-bridge-password ./flimap
 ```
 
 ### HTTP (optional)
 
 ```sh
-FLYMAP_USERNAME=you@protonmail.com FLYMAP_PASSWORD=your-bridge-password ./flymap --http :8080
+FLIMAP_USERNAME=you@protonmail.com FLIMAP_PASSWORD=your-bridge-password ./flimap --http :8080
 ```
 
 ## MCP Client Configuration
@@ -53,11 +53,11 @@ Add to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "flymap": {
-      "command": "/path/to/flymap",
+    "flimap": {
+      "command": "/path/to/flimap",
       "env": {
-        "FLYMAP_USERNAME": "you@protonmail.com",
-        "FLYMAP_PASSWORD": "your-bridge-password"
+        "FLIMAP_USERNAME": "you@protonmail.com",
+        "FLIMAP_PASSWORD": "your-bridge-password"
       }
     }
   }

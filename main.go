@@ -28,7 +28,7 @@ func main() {
 	svc := NewMailService(cfg, logger)
 
 	server := mcp.NewServer(&mcp.Implementation{
-		Name:    "flymap",
+		Name:    "flimap",
 		Version: "0.1.0",
 	}, &mcp.ServerOptions{
 		Instructions: "IMAP/SMTP mail server for Protonmail Bridge. " +
@@ -46,13 +46,13 @@ func main() {
 
 	if *httpAddr != "" {
 		handler := mcp.NewStreamableHTTPHandler(func(*http.Request) *mcp.Server { return server }, nil)
-		logger.Info("flymap MCP server listening", "addr", *httpAddr)
+		logger.Info("flimap MCP server listening", "addr", *httpAddr)
 		if err := http.ListenAndServe(*httpAddr, handler); err != nil {
 			logger.Error("server failed", "error", err)
 			os.Exit(1)
 		}
 	} else {
-		logger.Info("flymap MCP server starting (stdio transport)")
+		logger.Info("flimap MCP server starting (stdio transport)")
 		if err := server.Run(ctx, &mcp.StdioTransport{}); err != nil {
 			logger.Error("server failed", "error", err)
 			os.Exit(1)

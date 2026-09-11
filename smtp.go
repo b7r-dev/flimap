@@ -134,7 +134,7 @@ func composeMessage(from string, to, cc, bcc []string, subject, body string) ([]
 	buf.WriteString("Date: " + time.Now().Format(time.RFC1123Z) + "\r\n")
 
 	// Message-ID
-	buf.WriteString(fmt.Sprintf("Message-ID: <%d.flymap@%s>\r\n", time.Now().UnixNano(), strings.Split(from, "@")[1]))
+	buf.WriteString(fmt.Sprintf("Message-ID: <%d.flimap@%s>\r\n", time.Now().UnixNano(), strings.Split(from, "@")[1]))
 
 	// MIME version and content type
 	buf.WriteString("MIME-Version: 1.0\r\n")
