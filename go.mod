@@ -1,4 +1,4 @@
-module flimap
+module github.com/b7r-dev/flimap
 
 go 1.26.1
 
