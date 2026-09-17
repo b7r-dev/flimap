@@ -14,11 +14,13 @@ Open a [GitHub Issue](../../issues) with:
 
 1. Fork the repo and create a branch from `main`
 2. Keep changes focused — one concern per PR
-3. Make sure it builds and passes vet:
+3. Make sure it builds, passes vet, and the tests pass:
    ```sh
    go build ./...
    go vet ./...
+   go test ./...
    ```
+   The tests run entirely against in-process IMAP/SMTP servers on loopback — they never touch a real mailbox.
 4. If adding a new tool, include a description in the tool registration and update the README tool table
 5. Don't commit `connection-details.txt`, the built binary, or `.DS_Store`
 
