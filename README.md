@@ -67,7 +67,7 @@ All configuration is via environment variables with the `FLIMAP_` prefix:
 | `FLIMAP_TLS_MODE` | `starttls` | TLS mode: `starttls`, `ssl`, or `none` |
 | `FLIMAP_FROM_ADDRESS` | = username | Override From address for sent mail |
 
-**Security:** TLS certificate verification is skipped by default (`InsecureSkipVerify: true`) since Bridge uses a self-signed certificate and traffic stays on localhost. If you're connecting to a remote server with a real certificate, you may want to change this in the source. All credentials stay local — flimap makes no network calls beyond your IMAP/SMTP server.
+**Security:** TLS certificate verification is skipped by default (`InsecureSkipVerify: true`) since Bridge uses a self-signed certificate and traffic stays on localhost. If you're connecting to a remote server with a real certificate, you may want to change this in the source. All credentials stay local — flimap makes no network calls beyond your IMAP/SMTP server. Note that any MCP client config you paste credentials into stores them in plaintext on disk — see the warning under [MCP Client Configuration](#mcp-client-configuration).
 
 ## Running
 
@@ -84,6 +84,8 @@ FLIMAP_USERNAME=you@protonmail.com FLIMAP_PASSWORD=your-bridge-password flimap -
 ```
 
 ## MCP Client Configuration
+
+> **Credentials in plaintext:** the examples below put your mail password directly into the client's config file, where it sits in plaintext on disk. Treat that file as a secret — don't commit or share it, keep it user-readable only (`chmod 600`), and assume it rides along in backups and support exports. A Protonmail Bridge password only unlocks IMAP/SMTP on localhost, so the stakes are modest; an app password for a remote provider (Gmail, Fastmail) is a full mail credential. Since flimap reads its config from environment variables, you can keep the password out of the config file entirely — see the notes under each client below.
 
 ### Claude Desktop
 
@@ -103,9 +105,19 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
+Claude Desktop passes `env` values through literally — it has no variable expansion — so the password has to live in this file. To keep it out, point `command` at a small wrapper script that supplies it from the macOS Keychain instead:
+
+```sh
+#!/bin/sh
+# one-time setup: security add-generic-password -s flimap -a you@protonmail.com -w
+exec env FLIMAP_PASSWORD="$(security find-generic-password -s flimap -w)" /path/to/flimap
+```
+
+Save it as e.g. `/path/to/flimap-wrapper`, make it executable, set `"command": "/path/to/flimap-wrapper"`, and drop the `FLIMAP_PASSWORD` line from the `env` block.
+
 ### OpenCode
 
-Add to `~/.config/opencode/opencode.json`:
+`opencode.json` supports variable substitution (`{env:VAR}`, `{file:path}`), so the password doesn't need to appear in the config. Export `FLIMAP_PASSWORD` in your shell profile, or store it in a file only you can read, and reference it:
 
 ```json
 {
@@ -116,13 +128,15 @@ Add to `~/.config/opencode/opencode.json`:
         "command": ["/path/to/flimap"],
         "environment": {
           "FLIMAP_USERNAME": "you@protonmail.com",
-          "FLIMAP_PASSWORD": "your-bridge-password"
+          "FLIMAP_PASSWORD": "{env:FLIMAP_PASSWORD}"
         }
       }
     }
   }
 }
 ```
+
+`{file:~/.secrets/flimap-password}` works too. Note that `{env:...}` resolves to an empty string when the variable isn't set, in which case flimap exits with a clear `FLIMAP_PASSWORD is required` error. See OpenCode's [variable substitution docs](https://opencode.ai/docs/config/#variables).
 
 ## Tools
 
